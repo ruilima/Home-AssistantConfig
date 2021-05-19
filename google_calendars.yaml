@@ -1,0 +1,44 @@
+
+- cal_id: rui.lima@smark.io
+  entities:
+  - device_id: rui_lima_smark_io
+    ignore_availability: true
+    name: rui.lima@smark.io
+    track: true
+    max_results: 50
+
+
+- cal_id: ruilima50@gmail.com
+  entities:
+  - device_id: ruilima50_gmail_com
+    ignore_availability: true
+    name: ruilima50@gmail.com
+    track: true
+
+- cal_id: addressbook#contacts@group.v.calendar.google.com
+  entities:
+  - device_id: contacts
+    ignore_availability: true
+    name: Contacts
+    track: true
+
+- cal_id: pt-pt.portuguese#holiday@group.v.calendar.google.com
+  entities:
+  - device_id: feriados_em_portugal
+    ignore_availability: true
+    name: Feriados em Portugal
+    track: true
+
+- cal_id: ht3jlfaac5lfd6263ulfh4tql8@group.calendar.google.com
+  entities:
+  - device_id: phases_of_the_moon
+    ignore_availability: true
+    name: Phases of the Moon
+    track: true
+
+- cal_id: 0jm02lp54ea6nn4u7j6m73svtkme4f1l@import.calendar.google.com
+  entities:
+  - device_id: liga_portugal_2020_2021_liga_nos
+    ignore_availability: true
+    name: 'Liga Portugal 2020-2021: Liga NOS'
+    track: true

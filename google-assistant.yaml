@@ -1,0 +1,65 @@
+  project_id: hassio-eddad
+  service_account: !include SERVICE_ACCOUNT.JSON
+  report_state: true
+  exposed_domains:
+    - light
+    - climate
+    - binary_sensor
+    - fan
+    - camera
+    - cover
+  entity_config:
+    switch.plug_escritorio:
+      expose: true
+      name: Tomada Escritório
+      
+    switch.plug_158d000156fa56:
+      expose: true
+      name: Tomada Geral
+      
+    switch.sonoff_10005152c1:
+      expose: true
+      name: Ventoinha Raspberry
+      
+    switch.sonoff_ventoinha:
+      expose: true
+      name: Ventoinha
+      
+    media_player.tv_sala:
+      expose: true
+      name: TV Sala
+      
+    script.1592137728424:
+      expose: true
+      name: Play TV Sala
+      
+    script.gravar_video:
+      expose: true
+      name: Gravar vídeo
+
+      
+    script.mostrar_camera_na_tv:
+      expose: true
+      name: Camera Quarto
+      
+    cover.sonoff_1000de16b6:
+        expose: true
+        name: Persiana Filho
+ 
+    switch.frigorifico:
+      expose: true
+      name: Frigorífico
+
+    switch.maquina_lavar_loica:
+      expose: true
+      name: Máquina de lavar loiça
+
+    switch.maquina_de_lavar_roupa:
+      expose: true
+      name: Máquina de lavar roupa
+
+    switch.shelly_termo_acumulador:
+      expose: true
+      name: Termoacumulador
+      
+      

@@ -1,0 +1,86 @@
+'1584452918850':
+  alias: MUTE TOGGLE AV RECEIVER
+  sequence:
+  - data:
+      command: mute
+      device: Av Receiver
+    entity_id: remote.broadlink
+    service: remote.send_command
+'1590249707730':
+  alias: TURN ON / TURN OFF AV RECEIVER
+  sequence:
+  - data:
+      command: Turn on
+      device: Av Receiver
+    entity_id: remote.broadlink
+    service: remote.send_command
+'1590264930511':
+  alias: POWER TOGGLE MEO BOX
+  sequence:
+  - data:
+      command: Power
+      device: MEO box
+    entity_id: remote.broadlink
+    service: remote.send_command
+'1590265061649':
+  alias: MUTE TOGGLE MEO BOX
+  sequence:
+  - data:
+      command: Mute
+      device: MEO box
+    entity_id: remote.broadlink
+    service: remote.send_command
+'1592137728424':
+  alias: PLAY TV SALA
+  sequence:
+  - data: {}
+    entity_id: media_player.tv_sala
+    service: media_player.media_play_pause
+power_tv:
+  alias: Power TV
+  mode: single
+  sequence:
+  - data:
+      command: Power
+      device: Tv
+    entity_id: remote.broadlink
+    service: remote.send_command
+mostrar_camera_na_tv:
+  alias: MOSTRAR CAMERA NA TV
+  sequence:
+  - service: webrtc.dash_cast
+    data:
+      entity_id: media_player.android_tv
+      url: rtsp://rtsp:ruilima50%40hotmail.com:THEwalking%4083hei@192.168.31.227/h264_stream
+  mode: single
+gravar_video:
+  alias: GRAVAR VÍDEO
+  sequence:
+  - service: camera.record
+    data:
+      filename: /media/video_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4
+      duration: 60
+      lookback: 10
+    entity_id: camera.camera_duarte
+  mode: single
+iniciar_meo_app:
+  alias: INICIAR MEO APP
+  sequence:
+  - service: androidtv.adb_command
+    data:
+      entity_id: media_player.mibox4
+      command: sendevent /dev/input/event2 4 4 786979 && sendevent /dev/input/event2
+        1 172 1 && sendevent /dev/input/event2 0 0 0 && sendevent /dev/input/event2
+        4 4 786979 && sendevent /dev/input/event2 1 172 0 && sendevent /dev/input/event2
+        0 0 0 && sendevent /dev/input/event2 4 4 786497 && sendevent /dev/input/event2
+        1 353 1 && sendevent /dev/input/event2 0 0 0 && sendevent /dev/input/event2
+        4 4 786497 && sendevent /dev/input/event2 1 353 0 && sendevent /dev/input/event2
+        0 0 0
+  mode: single
+reset_campainha:
+  alias: RESET CAMPAINHA
+  sequence:
+  - service: counter.reset
+    target:
+      entity_id: counter.campainha
+  mode: single

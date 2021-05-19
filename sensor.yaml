@@ -1,0 +1,469 @@
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /home
+      - type: memory_free
+
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) | round(1) }}'
+
+  - platform: template
+    sensors:
+      power_consumption:
+        friendly_name: "Geral"
+        unit_of_measurement: 'W'
+        value_template: "{{ state_attr('switch.plug_158d000156fa56', 'load_power') }}"
+
+  - platform: template
+    sensors:
+      latitude_rui:
+        friendly_name: "Latitude Rui"
+        value_template: "{{ state_attr('sensor.mi_9t_pro_geocoded_location', 'Latitude') }}"
+
+  - platform: template
+    sensors:
+      longitude_rui:
+        friendly_name: "Longitude Rui"
+        value_template: "{{ state_attr('sensor.mi_9t_pro_geocoded_location', 'Longitude') }}"
+
+  - platform: template
+    sensors:
+      origin_rui:
+        friendly_name: "Location Rui"
+        value_template: "{{ state_attr('sensor.mi_9t_pro_geocoded_location', 'Latitude') }},{{ state_attr('sensor.mi_9t_pro_geocoded_location', 'Longitude') }}"
+
+  - platform: template
+    sensors:
+      origin_magaly:
+        friendly_name: "Location Magaly"
+        value_template: "{{ state_attr('sensor.redmi_6_geocoded_location', 'Latitude') }},{{ state_attr('sensor.redmi_6_geocoded_location', 'Longitude') }}"
+
+  - platform: template
+    sensors:
+      solar_angle:
+        friendly_name: "Ângulo do Sol"
+        unit_of_measurement: 'degrees'
+        value_template: "{{ state_attr('sun.sun', 'elevation') }}"
+
+      sunrise:
+        value_template: "{{ state_attr('sun.sun', 'next_rising') }}"
+ 
+  - platform: template
+    sensors:
+       ultima_abertura_porta:
+          friendly_name: 'Porta frente - Última abertura'
+          value_template: '{{ as_timestamp(states.binary_sensor.door_window_sensor.last_updated) | timestamp_custom("%a %H:%M", True) }}'
+          availability_template: true
+          unique_id: 'Abertura Porta'
+  
+  - platform: template
+    sensors:
+      power_consumption_tomada_geral:
+        friendly_name: "Consumo Tomada Geral"
+        value_template: "{{ state_attr('switch.plug_158d000156fa56', 'load_power') }}"
+
+
+  - platform: template
+    sensors:
+      low_battery:
+        friendly_name: "Low Battery"
+        value_template: >
+          {%- set threshold = 40 -%}
+          {%- set domains = ['light', 'switch', 'sensor', 'zwave', 'lock'] -%}
+          {%- for domain in domains -%}
+          {%- for item in states[domain] if ((item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) or ("battery" in item.name | lower and ((item.state | int < threshold and item.state|int != 0) or item.state | lower == "low" or item.state | lower == "unknown"))) -%}
+              {{ item.attributes.friendly_name }}{%- if not loop.last %}, {% endif -%}
+          {%- endfor -%}
+          {%- endfor -%}
+
+  - platform: template
+    sensors:
+      cube_last_state:
+        friendly_name: "Cubo Rui"
+        value_template: "{{ states.binary_sensor.cube_rui.attributes.last_action }}"
+
+#frigorífico
+  - platform: template
+    sensors:
+      frigorifico_voltage:
+        value_template: >-
+          {{ states.switch.frigorifico.attributes.voltage }}
+        unit_of_measurement: 'V'
+      frigorifico_current:
+        value_template: >-
+          {{ states.switch.frigorifico.attributes.current }}
+        unit_of_measurement: 'mA'
+      frigorifico_current_consumption:
+        value_template: >-
+          {{ states.switch.frigorifico.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+  - platform: integration
+    source: sensor.frigorifico_current_consumption
+    name: frigorifico_khw
+    unit_prefix: k
+    round: 2
+
+
+#Máquina Lavar Roupa
+  - platform: template
+    sensors:
+      maquina_lavar_roupa_voltage:
+        value_template: >-
+          {{ states.switch.maquina_de_lavar_roupa.attributes.voltage }}
+        unit_of_measurement: 'V'
+      maquina_lavar_roupa_current:
+        value_template: >-
+          {{ states.switch.maquina_de_lavar_roupa.attributes.current }}
+        unit_of_measurement: 'mA'
+      maquina_lavar_roupa_current_consumption:
+        value_template: >-
+          {{ states.switch.maquina_de_lavar_roupa.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+  - platform: integration
+    source: sensor.maquina_lavar_roupa_current_consumption
+    name: maquina_roupa_khw
+    unit_prefix: k
+    round: 2
+
+
+#Máquina Lavar Loiça
+  - platform: template
+    sensors:
+      maquina_lavar_loica_voltage:
+        value_template: >-
+          {{ states.switch.maquina_lavar_loica.attributes.voltage }}
+        unit_of_measurement: 'V'
+      maquina_lavar_roupa_current:
+        value_template: >-
+          {{ states.switch.maquina_lavar_loica.attributes.current }}
+        unit_of_measurement: 'mA'
+      maquina_lavar_loica_current_consumption:
+        value_template: >-
+          {{ states.switch.maquina_lavar_loica.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+#Tomada Aquecedor
+  - platform: template
+    sensors:
+      tomada_aquecedor_voltage:
+        value_template: >-
+          {{ states.switch.tomada_aquecedor.attributes.voltage }}
+        unit_of_measurement: 'V'
+      tomada_aquecedor_current:
+        value_template: >-
+          {{ states.switch.tomada_aquecedor.attributes.current }}
+        unit_of_measurement: 'mA'
+      tomada_aquecedor_current_consumption:
+        value_template: >-
+          {{ states.switch.tomada_aquecedor.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+
+  - platform: integration
+    source: sensor.tomada_aquecedor_current_consumption
+    name: tomada_aquecedor_khw
+    unit_prefix: k
+    round: 2
+    
+    
+    
+  - platform: integration
+    source: sensor.maquina_lavar_loica_current_consumption
+    name: maquina_loica_khw
+    unit_prefix: k
+    round: 2
+
+  - platform: integration
+    source: sensor.shelly_termo_acumulador_consumo
+    name: termo_acumulador_khw
+    unit_prefix: k
+    method: left
+    round: 2
+
+  - platform: integration
+    source: sensor.tomada_geral_current_consumption
+    name: tomada_geral_khw
+    unit_prefix: k
+    round: 2
+
+  - platform: integration
+    source: sensor.power_consumption_escritorio
+    name: tomada_escritorio_khw
+    unit_prefix: k
+    round: 2
+
+
+
+
+
+#Tomada aquecedor
+  - platform: template
+    sensors:
+      tomada_aquecedor_voltage:
+        value_template: >-
+          {{ states.switch.aquecedor_ligar_desligar.attributes.voltage }}
+        unit_of_measurement: 'V'
+      maquina_lavar_roupa_current:
+        value_template: >-
+          {{ states.switch.aquecedor_ligar_desligar.attributes.current }}
+        unit_of_measurement: 'mA'
+      maquina_lavar_roupa_current_consumption:
+        value_template: >-
+          {{ states.switch.aquecedor_ligar_desligar.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+#Tomada Persianas
+  - platform: template
+    sensors:
+      tomada_persiana_voltage:
+        value_template: >-
+          {{ states.switch.tomada_persiana.attributes.voltage }}
+        unit_of_measurement: 'V'
+      maquina_lavar_roupa_current:
+        value_template: >-
+          {{ states.switch.tomada_persiana.attributes.current }}
+        unit_of_measurement: 'mA'
+      maquina_lavar_roupa_current_consumption:
+        value_template: >-
+          {{ states.switch.tomada_persiana.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+#Tomada Escritório
+  - platform: template
+    sensors:
+      tomada_escritorio_b_voltage:
+        value_template: >-
+          {{ states.switch.tomada_escritorio.attributes.voltage }}
+        unit_of_measurement: 'V'
+      tomada_escritorio_b_current:
+        value_template: >-
+          {{ states.switch.tomada_escritorio.attributes.current }}
+        unit_of_measurement: 'mA'
+      tomada_escritorio_b_current_consumption:
+        value_template: >-
+          {{ states.switch.tomada_escritorio.attributes.current_consumption }}
+        unit_of_measurement: 'W'
+
+  - platform: integration
+    source: sensor.tomada_escritorio_b_current_consumption
+    name: tomada_escritorio_b_khw
+    unit_prefix: k
+    round: 2
+
+
+
+
+#Tomada Geral
+  - platform: template
+    sensors:
+      tomada_geral_current_consumption:
+        value_template: >-
+          {{ states.switch.plug_158d000156fa56.attributes.load_power }}
+        unit_of_measurement: 'W'
+
+#Tomada escritório
+  - platform: template
+    sensors:
+      power_consumption_escritorio:
+        friendly_name: "Tomada Escritório"
+        unit_of_measurement: 'W'
+        value_template: "{{ state_attr('switch.plug_escritorio', 'load_power') }}"
+
+  
+  - platform: template
+    sensors:
+        frigorifico_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.frigorifico_consumo_peak')|float*0.156)  | round(2)}}
+        frigorifico_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.frigorifico_consumo_dia_peak')|float*0.156)  | round(2)}}
+        maquina_roupa_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.maquina_roupa_consumo_peak')|float*0.156)  | round(2)}}
+        maquina_roupa_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.maquina_roupa_consumo_dia_peak')|float*0.156)  | round(2)}}
+        maquina_loica_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.maquina_loica_consumo_peak')|float*0.156)  | round(2)}}
+        maquina_loica_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.maquina_loica_consumo_dia_peak')|float*0.156)  | round(2)}}
+        termoacumulador_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.termoacumulador_consumo_peak') | float * 0.156) | round(2)}}
+        termoacumulador_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.termoacumulador_consumo_dia_peak') | float * 0.156) | round(2)}}
+                
+        tomada_geral_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_geral_consumo_peak')|float*0.156) | round(2)}}
+        tomada_geral_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_geral_consumo_dia_peak')|float*0.156) | round(2)}}
+                
+        tomada_escritorio_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_escritorio_consumo_peak')|float*0.156) | round(2)}}
+                
+
+        tomada_escritorio_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_escritorio_consumo_dia_peak')|float*0.156) | round(2)}}
+                
+        tomada_aquecedor_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_aquecedor_consumo_peak')|float*0.156) | round(2)}}
+        tomada_aquecedor_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_aquecedor_consumo_dia_peak')|float*0.156) | round(2)}}
+                
+        tomada_escritorio_b_gasto:
+            friendly_name: "Gasto mensal"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_escritorio_b_consumo_peak')|float*0.156) | round(2)}}
+        tomada_escritorio_b_gasto_dia:
+            friendly_name: "Gasto diário"
+            unit_of_measurement: "€"
+            icon_template: mdi:currency-eur
+            value_template: >
+                {{ (states('sensor.tomada_escritorio_b_consumo_dia_peak')|float*0.156) | round(2)}}
+                
+
+  - platform: mqtt
+    name: "Contador - Tensão"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Voltage_P1|float }}'
+    unit_of_measurement: "V"
+    icon: mdi:flash
+
+  - platform: mqtt
+    name: "Contador - Corrente"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Current_P1|float }}'
+    unit_of_measurement: "A"
+    icon: mdi:power-socket
+
+  - platform: mqtt
+    name: "Contador - Fator de Potência"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.PFactor_P1|float }}'
+    unit_of_measurement: "p.u."
+    icon: mdi:percent
+    
+  - platform: mqtt
+    name: "Contador - Frequência"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Frequency_P1|float }}'
+    unit_of_measurement: "Hz"
+    icon: mdi:current-ac
+    
+  - platform: mqtt
+    name: "Contador - Potência Ativa"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Power_P1|float }}'
+    unit_of_measurement: "W"
+    icon: mdi:power-plug
+    
+  - platform: mqtt
+    name: "Contador - Total Vazio"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Energy_P1_R1|float }}'
+    unit_of_measurement: "kWh"
+    icon: mdi:transmission-tower
+    
+  - platform: mqtt
+    name: "Contador - Total Ponta"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Energy_P1_R2|float }}'
+    unit_of_measurement: "kWh"
+    icon: mdi:transmission-tower
+    
+  - platform: mqtt
+    name: "Contador - Total Cheia"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: '{{ value_json.EB.Energy_P1_R3|float }}'
+    unit_of_measurement: "kWh"
+    icon: mdi:transmission-tower
+    
+  - platform: mqtt
+    name: "Contador - Tarifa"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: >-
+      {% if value_json.EB.Tariff_P1|int == 1 %}
+        {{ 'Vazio' }}
+      {% elif value_json.EB.Tariff_P1|int == 2 %}
+        {{ 'Ponta' }}
+      {% elif value_json.EB.Tariff_P1|int == 3 %}
+        {{ 'Cheia' }}
+      {% else %}
+        {{ value_json.EB.Tariff_P1|string }}
+      {% endif %}
+    icon: 'mdi:counter'
+    
+  - platform: mqtt
+    name: "Contador - Estado DCP"
+    state_topic: "tele/edp_box/SENSOR"
+    value_template: >-
+      {% if value_json.EB.DCP_P1|int == 0 %}
+        {{ 'Desligado' }}
+      {% elif value_json.EB.DCP_P1|int == 1 %}
+        {{ 'Ligado' }}
+      {% elif value_json.EB.DCP_P1|int == 2 %}
+        {{ 'Preparado para religação' }}
+      {% else %}
+        {{ value_json.EB.DCP_P1|string }}
+      {% endif %}
+    icon: 'mdi:cog-refresh'
+         

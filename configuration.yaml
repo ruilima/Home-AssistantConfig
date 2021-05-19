@@ -1,0 +1,433 @@
+# Example configuration.yaml entry
+wake_on_lan: # enables `wake_on_lan` domain
+
+# Example configuration.yaml entry
+webostv:
+  host: 192.168.31.23
+  name: TV Sala
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: !secret webos_mac
+
+  customize:
+    sources:
+      - hdmi1
+      - hdmi2
+      - hdmi3
+      - livetv
+      - youtube
+      - netflix
+
+media_player:
+  - platform: androidtv
+    host: 192.168.31.138
+    name: Mibox4
+    scan_interval: 1
+    apps:
+      com.amazon.avod: "Amazon Video"
+      com.google.android.tvlauncher: "Homescreen"
+      com.google.android.apps.mediashell: "Google Cast"
+      eu.hboportugal.androidtv: "HBOPortugal"
+      org.xbmc.kodi: "Kodi"
+      com.netflix.ninja: "Netflix"
+      com.alticelabs.meo.androidtv: "MEO"
+    state_detection_rules:
+      'eu.hboportugal.androidtv':
+        - 'playing':
+            #'media_session_state': 1
+            'wake_lock_size': 3
+        - 'paused':
+            #'media_session_state': 1
+            'wake_lock_size': 1
+        - 'standby'
+
+hacs:
+    token: !secret hacs_token
+
+notify:
+  - platform: webostv
+    host: 192.168.31.23
+    name: LivingRoom_tv
+  - name: pushbullet
+    platform: pushbullet
+    api_key: !secret pushbulletkey
+
+
+# Example configuration.yaml entry
+discovery:
+  ignore:
+    - google_cast
+    - yeelight
+
+
+# Example configuration.yaml entry
+sensor: !include sensor.yaml
+
+
+
+# Track the sun
+sun:
+
+
+# Example configuration.yaml entry
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
+  
+# Example configuration.yaml entry
+#google:
+#  client_id: !secret google_client_id
+#  client_secret: !secret google_client_secret
+
+google_assistant: !include google-assistant.yaml  
+
+# Example configuration.yaml entry
+climate:
+  - platform: generic_thermostat
+    name: Sala
+    heater: input_boolean.fake_heater
+    target_sensor: sensor.temperature_158d0001fd85a2
+    ac_mode: false
+    initial_hvac_mode: "off"
+
+  - platform: generic_thermostat
+    name: Sala
+    heater: input_boolean.fake_heater2
+    target_sensor: sensor.humidity_158d0001fd85a2
+    ac_mode: false
+    initial_hvac_mode: "off"
+
+  - platform: generic_thermostat
+    name: Quarto Duarte
+    heater: input_boolean.fake_heater3
+    target_sensor: sensor.temperature_quarto_duarte
+    ac_mode: false
+    initial_hvac_mode: "off"
+
+  - platform: generic_thermostat
+    name: Água
+    heater: input_boolean.fake_heater4
+    target_sensor: sensor.shelly_termoacumulador_temperature
+    ac_mode: false
+    initial_hvac_mode: "off"
+    
+  - platform: miheater
+    host: 192.168.31.235
+    token: !secret mi_heater_token
+    name: Aquecedor Sala
+    model: zhimi.heater.mc2
+
+
+input_boolean:
+  fake_heater:
+    name: Fake Heater
+    icon: mdi:toggle-switch-off
+  fake_heater2:
+    name: Fake Heater
+    icon: mdi:toggle-switch-off
+  fake_heater3:
+    name: Fake Heater
+    icon: mdi:toggle-switch-off
+
+frontend:
+  #themes: !include google-home.yaml
+  themes: !include_dir_merge_named themes
+
+
+sonoff:
+  username: !secret sonoff_username
+  password: !secret sonoff_password
+  reload: always
+
+# Example configuration.yaml entry
+remote:
+  #- platform: broadlink
+    #host: 192.168.31.165
+    #mac: !secret broadlink_mac
+
+# Example configuration.yaml entry
+light:
+  - platform: switch
+    name: Luz Sala 2
+    entity_id: switch.sonoff_sala
+    
+  - platform: switch
+    name: Luz Cozinha
+    entity_id: switch.sonoff_cozinha
+    
+  - platform: switch
+    name: Luz Entrada
+    entity_id: switch.sonoff_entrada
+    
+  - platform: switch
+    name: Luz Rua
+    entity_id: switch.sonoff_rua
+    
+  - platform: switch
+    name: Luz Escritório
+    entity_id: switch.sonoff_escritorio
+    
+  - platform: switch
+    name: Luz Corredor
+    entity_id: switch.shelly_luz_corredor
+    
+  - platform: switch
+    name: Luz Quarto 2
+    entity_id: switch.shelly_quarto_2
+    
+  - platform: switch
+    name: Luz Varanda
+    entity_id: switch.tasmota_tasmota
+    
+  - platform: switch
+    name: Paris
+    entity_id: switch.sonoff_10009c524f
+
+  - platform: switch
+    name: Casa de banho teto
+    entity_id: switch.casa_de_banho_1
+
+  - platform: switch
+    name: Casa de banho parede
+    entity_id: switch.casa_de_banho_2
+
+  - platform: switch
+    name: Casa de banho visita parede
+    entity_id: switch.casa_de_banho_visita
+ 
+  - platform: switch
+    name: Casa de banho visita teto
+    entity_id: switch.casa_de_banho_visita_2
+ 
+  - platform: switch
+    name: Luz de presença
+    entity_id: switch.sonoff_aaaa
+ 
+  - platform: switch
+    name: Corredor  cozinha
+    entity_id: switch.corredor_cozinha
+ 
+  - platform: switch
+    name: Despensa
+    entity_id: switch.despensa
+    
+  - platform: flux_led
+    devices:
+      192.168.31.117:
+        name: Luz Vertical
+
+
+  - platform: group
+    name: Luzes Sala
+    entities:
+      - light.fita_led_tv
+      - light.candeeiro_sofa
+      - light.luz_sala
+      - light.luz_sala_2
+      - light.luz_vertical
+
+  - platform: group
+    name: Luzes Quarto
+    entities:
+      - light.luz_rui
+      - light.luz_quarto
+      - light.70770354c44f33aefbfc
+
+
+device_tracker:
+  - platform: xiaomi
+    host: 192.168.1.65
+    password: !secret xiaomi_router_password
+
+
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+
+recorder:
+  purge_keep_days: 5
+  auto_purge: true
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+http:
+  base_url: !secret http_base_url
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+
+# Text to speech
+tts:
+  - platform: google_translate
+    language: 'pt'
+    base_url: https://home.buzod.com
+
+#influxdb:
+#  host: !secret influxdb_host
+#  port: 8086
+#  database: !secret influxdb_database
+#  username: !secret influxdb_username
+#  password: !secret influxdb_password
+#  max_retries: 3
+#  default_measurement: state
+
+
+camera:
+  - platform: generic
+    still_image_url: http://192.168.31.42/jpg/image.jpg
+    stream_source: !secret camera_stream_source
+    name: Camera Duarte
+    
+  - platform: generic
+    still_image_url: https://home.buzod.com{{ states.media_player.mibox4.attributes.entity_picture }}
+    name: Android Image
+
+stream:
+
+utility_meter:
+  frigorifico_consumo:
+    source: sensor.frigorifico_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+  frigorifico_consumo_dia:
+    source: sensor.frigorifico_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+  maquina_roupa_consumo:
+    source: sensor.maquina_roupa_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+  maquina_roupa_consumo_dia:
+    source: sensor.maquina_roupa_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+  maquina_loica_consumo:
+    source: sensor.maquina_loica_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+  maquina_loica_consumo_dia:
+    source: sensor.maquina_loica_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+  termoacumulador_consumo:
+    source: sensor.termo_acumulador_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+  termoacumulador_consumo_dia:
+    source: sensor.termo_acumulador_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+  tomada_geral_consumo:
+    source: sensor.tomada_geral_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+  tomada_geral_consumo_dia:
+    source: sensor.tomada_geral_khw
+    cycle: daily
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+
+
+  tomada_escritorio_consumo:
+    source: sensor.tomada_escritorio_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+  tomada_escritorio_consumo_dia:
+    source: sensor.tomada_escritorio_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+
+  tomada_aquecedor_consumo:
+    source: sensor.tomada_aquecedor_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+      
+  tomada_aquecedor_consumo_dia:
+    source: sensor.tomada_aquecedor_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+
+  tomada_escritorio_b_consumo:
+    source: sensor.tomada_escritorio_b_khw
+    cycle: monthly
+    tariffs:
+      - peak
+    offset:
+      days: 21
+      hours: 0
+      minutes: 0
+      
+  tomada_escritorio_b_consumo_dia:
+    source: sensor.tomada_escritorio_b_khw
+    cycle: daily
+    tariffs:
+      - peak
+
+
+  passos_diarios:
+    source: sensor.mi_9t_pro_steps_sensor
+    cycle: daily
+    
+counter:
+  campainha:
+    initial: 0
+    step: 1
+
+
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml

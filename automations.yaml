@@ -1,0 +1,1432 @@
+- id: '1584053567471'
+  alias: BOTAO_ACENDER_LUZ_BED_LIGHT_RUI
+  description: ''
+  trigger:
+  - event_data:
+      click_type: single
+      entity_id: binary_sensor.switch_rui
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto_2
+    service: light.toggle
+  mode: single
+- id: '1584091918632'
+  alias: Novo_Coronavirus
+  description: ''
+  trigger:
+  - entity_id: sensor.portugal_coronavirus_confirmed
+    platform: state
+  condition: []
+  action:
+  - data:
+      message: O número de COVI-19 aumentou
+    service: notify.living_room_tv
+- id: '1584104270347'
+  alias: MOSTRAR TEMPERATURA ÀS 22:00 NA TV
+  description: ''
+  trigger:
+  - at: '22:00:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      message: 'Estão {{ state_attr(''weather.casa'', ''temperature'') }}°C '
+    service: notify.tv_sala
+- id: '1584286217158'
+  alias: KODI PAUSADO ACENDER LUZES
+  description: ''
+  trigger:
+  - entity_id: media_player.kodi
+    platform: state
+    to: paused
+  condition: []
+  action:
+  - data:
+      effect: Slowdown
+    entity_id: light.fita_led_tv
+    service: light.turn_on
+  - data: {}
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.turn_on
+- id: '1584287101198'
+  alias: KODI REPRODUZINDO APAGAR LUZES
+  description: ''
+  trigger:
+  - entity_id: media_player.kodi
+    platform: state
+    to: playing
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.fita_led_tv
+    service: light.turn_off
+  - data: {}
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.turn_off
+- id: '1584291163403'
+  alias: NETFLIX PAUSED
+  description: ''
+  trigger:
+  - entity_id: media_player.mibox4
+    platform: state
+    to: paused
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.fita_led_tv
+    service: light.turn_on
+  mode: single
+- id: '1584291216834'
+  alias: NETFLIX PLAYING
+  description: ''
+  trigger:
+  - entity_id: media_player.mibox4
+    platform: state
+    to: playing
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.fita_led_tv
+    service: light.turn_off
+  mode: single
+- id: '1584291947221'
+  alias: PAUSAR/REPRODUZIR NETFLIX COM SINGLE CLICK BOTÃO SALA
+  description: ''
+  trigger:
+  - event_data:
+      click_type: single
+      entity_id: binary_sensor.switch_sala
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: media_player.tv_sala
+    service: media_player.media_pause
+- id: '1584298632457'
+  alias: CORONAVÍRUS:TOTAL:PORTUGAL
+  description: ''
+  trigger:
+  - hours: '1'
+    minutes: '0'
+    platform: time_pattern
+    seconds: '0'
+  condition: []
+  action:
+  - data:
+      message:
+        '[object Object]':
+    service: notify.tv_sala
+- id: '1584395034064'
+  alias: BOTÂO RM433 ACENDER FITA LED TV
+  description: ''
+  trigger:
+  - event_data:
+      name: c
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data:
+      rgb_color:
+      - 120
+      - 120
+      - 120
+    entity_id: light.fita_led_tv
+    service: light.toggle
+- id: '1584397760129'
+  alias: BOTÂO RM433 ACENDER LUZ SALA
+  description: ''
+  trigger:
+  - event_data:
+      name: b
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_sala
+    service: light.toggle
+- id: '1584398722348'
+  alias: BOTÂO RM433 DESLIGAR/LIGAT TV
+  description: ''
+  trigger:
+  - event_data:
+      name: g
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: media_player.tv_sala
+    service: media_player.toggle
+  - data:
+      command: Turn on
+      device: Av Receiver
+      entity_id: remote.broadlink
+    entity_id: remote.broadlink
+    service: remote.send_command
+  - data:
+      command: Power
+      device: MEO box
+      entity_id: remote.broadlink
+    entity_id: remote.broadlink
+    service: remote.send_command
+- id: '1584403403667'
+  alias: BOTÂO RM433 ACENDER LUZ VERTICAL
+  description: ''
+  trigger:
+  - event_data:
+      name: d
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_vertical
+    service: light.toggle
+- id: '1584403528139'
+  alias: BOTÂO RM433 ACENDER LUZ SOFA
+  description: ''
+  trigger:
+  - event_data:
+      name: f
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.candeeiro_sofa
+    service: light.toggle
+- id: '1585055479752'
+  alias: Mostrar numero coronavirus pt
+  description: ''
+  trigger:
+  - event_data:
+      name: h
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data:
+      effect: Police
+    entity_id: light.fita_led_tv
+    service: light.turn_on
+  - data:
+      message: 'Portugal > Confirmados: {{ states(''sensor.portugal_coronavirus_confirmed'')
+        }} | Mortos: {{ states(''sensor.portugal_coronavirus_deaths'') }}'
+    service: notify.tv_sala
+  - delay: '4'
+  - data:
+      message: 'Cabo Verde > Confirmados: {{ states(''sensor.cabo_verde_coronavirus_confirmed'')
+        }} | Mortos: {{ states(''sensor.cabo_verde_coronavirus_deaths'') }} '
+    service: notify.tv_sala
+  - delay: '4'
+  - data:
+      message: 'Mundo > Confirmados: {{ states(''sensor.worldwide_coronavirus_confirmed'')
+        }} | Mortos: {{ states(''sensor.worldwide_coronavirus_deaths'') }} '
+    service: notify.tv_sala
+  - delay: '4'
+  - data: {}
+    entity_id: light.fita_led_tv
+    service: light.turn_off
+- id: '1585178535784'
+  alias: Nova Automação emoticon-sad
+  description: ''
+  trigger:
+  - event_data: {}
+    event_type: m
+    platform: event
+  condition: []
+  action:
+  - data:
+      data:
+        icon: /home/homeassistant/images/doorbell.png
+      message: ok
+    service: notify.living_room_tv
+- id: '1585262566625'
+  alias: LIGAR VENTOINHA RESPBERRY SE TEMPERATURA ALTA
+  description: ''
+  trigger:
+  - above: '60'
+    entity_id: sensor.cpu_temperature
+    platform: numeric_state
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.sonoff_10005152c1
+    service: switch.turn_on
+  mode: single
+- id: '1585262724256'
+  alias: DESLIGAR VENTOINHA RESPBERRY SE TEMPERATURA BAIXA
+  description: ''
+  trigger:
+  - entity_id: sensor.cpu_temperature
+    platform: numeric_state
+    below: '38'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.sonoff_10005152c1
+    service: switch.turn_off
+  mode: single
+- id: '1585515165936'
+  alias: BOTÂO RF ACENDER LUZ SALA
+  description: ''
+  trigger:
+  - event_data:
+      name: ab
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_sala
+    service: light.toggle
+- id: '1586181532242'
+  alias: BOTÂO RF ACENDER LUZ SALA 2
+  description: ''
+  trigger:
+  - event_data:
+      name: bc
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.sonoff_sala
+    service: switch.toggle
+- id: '1586181648013'
+  alias: BOTÂO RF ACENDER LUZ VERTICAL
+  description: ''
+  trigger:
+  - event_data:
+      name: cd
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_vertical
+    service: light.toggle
+- id: '1586383723201'
+  alias: BOTAO_ACENDER_LUZ_CORREDOR_MAGALY
+  description: ''
+  trigger:
+  - event_data:
+      click_type: single
+      entity_id: binary_sensor.switch_magaly
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    entity_id: light.luz_magaly
+  mode: single
+- id: '1586383918086'
+  alias: BOTAO_ACENDER_LUZ_QUARTO_RUI
+  description: ''
+  trigger:
+  - event_data:
+      click_type: double
+      entity_id: binary_sensor.switch_rui
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto
+    service: light.toggle
+  mode: single
+- id: '1587242967408'
+  alias: Busy
+  description: ''
+  trigger:
+  - event_data:
+      name: busy
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data:
+      brightness: 50
+      rgb_color:
+      - 255
+      - 0
+      - 0
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.toggle
+- id: '1587415429889'
+  alias: BOTÂO RF ACENDER FITA LED TV
+  description: ''
+  trigger:
+  - event_data:
+      name: de
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.fita_led_tv
+    service: light.toggle
+- id: '1587941868956'
+  alias: Abrir porta - acender luz
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.sonoff_entrada
+    service: switch.turn_on
+  - delay: '100'
+  - data: {}
+    entity_id: switch.sonoff_entrada
+    service: switch.turn_off
+- id: '1588691515343'
+  alias: BOTAO_ACENDER_LUZ_QUARTO_MAGALY
+  description: ''
+  trigger:
+  - event_data:
+      click_type: double
+      entity_id: binary_sensor.switch_magaly
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto
+    service: light.toggle
+- id: '1588703823765'
+  alias: Apagar luz da rua quando deixado ligado
+  description: ''
+  trigger:
+  - entity_id: switch.sonoff_rua
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - delay: '10'
+  - data: {}
+    entity_id: switch.sonoff_rua
+    service: switch.turn_off
+- id: '1588708993985'
+  alias: Nova Automação
+  description: ''
+  trigger:
+  - event: sunrise
+    platform: sun
+  condition: []
+  action:
+  - data:
+      message: olá
+    service: notify.mobile_app_mi_9t_pro
+- id: '1588796738768'
+  alias: Movimento Entrada - acender gateway
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_158d0002e9f95d
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: and
+    conditions:
+    - after: '18:30'
+      before: 08:00
+      condition: time
+  action:
+  - data: {}
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.turn_on
+  - delay: '60'
+  - data: {}
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.turn_off
+  - data: {}
+    entity_id: light.luz_corredor
+    service: light.turn_off
+  mode: single
+- id: '1588947906018'
+  alias: Nova Automação
+  description: ''
+  trigger:
+  - event_data: {}
+    event_type: kkkk:oo
+    platform: event
+  condition: []
+  action:
+  - data:
+      message: May the Force be with you.
+      title: Custom subject
+    service: notify.pushbullet
+- id: '1589310635264'
+  alias: ENVIAR NOTIFICAÇÃO SE PORTA ABERTA 1 MINUTO
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor
+    for: '60'
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: Porta aberta a mais de um minuto
+      title: Porta Aberta
+    service: notify.pushbullet
+  - data:
+      entity_id: media_player.living_room_speaker
+      message: Porta aberta a mais de um minuto
+    service: tts.google_translate_say
+  mode: single
+- id: '1589411826479'
+  alias: mv
+  description: ''
+  trigger:
+  - event_data: {}
+    event_type: ifttt_webhook_received
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: media_player.bedroom_speaker
+      message: Houve movimento super sexy
+    service: tts.google_translate_say
+- id: '1589570927586'
+  alias: ENVIAR NOTIFICAÇÃO SE TERMOACUMULADOR SE LIGAR
+  description: ''
+  trigger:
+  - above: '5'
+    entity_id: sensor.shelly_termo_acumulador_consumo
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      message: O Termoacumulador está ligado
+      title: TERMOACUMULADOR LIGADO
+    service: notify.pushbullet
+- id: '1589571003724'
+  alias: ENVIAR NOTIFICAÇÃO SE TERMOACUMULADOR PARAR
+  description: ''
+  trigger:
+  - below: '5'
+    entity_id: sensor.shelly_termo_acumulador_consumo
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      message: O termoacumulador está parado
+      title: TERMOACUMULADOR PARADO
+    service: notify.pushbullet
+- id: '1589830663916'
+  alias: BOTÃO_CORREDOR_APAGAR_GATEWAY
+  description: ''
+  trigger:
+  - entity_id: switch.shelly_luz_corredor
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - delay: '5'
+  - data: {}
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.turn_off
+  mode: single
+- id: '1589830712373'
+  alias: BOTÃO_CORREDOR_ACENDER_GATEWAY
+  description: ''
+  trigger:
+  - entity_id: switch.shelly_luz_corredor
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.gateway_light_286c0785bd1f
+    service: light.turn_on
+- id: '1589905085965'
+  alias: BOTAO RF ESCRITORIO LIGAR/DESLIGAR LUZ
+  description: ''
+  trigger:
+  - event_data:
+      name: Escritorio1
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_escritorio
+    service: light.toggle
+- id: '1589905311387'
+  alias: BOTAO RF ESCRITORIO LIGAR/DESLIGAR TOMADA
+  description: ''
+  trigger:
+  - event_data:
+      name: Escritorio2
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.plug_escritorio
+    service: switch.toggle
+- id: '1589910084455'
+  alias: BOTAO RF COZINHA SPOTIFY NEXT
+  description: ''
+  trigger:
+  - event_data:
+      name: Cozinha4
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: media_player.spotify_rui_lima
+    service: media_player.media_next_track
+- id: '1589910261299'
+  alias: BOTAO RF COZINHA SPOTIFY PREV
+  description: ''
+  trigger:
+  - event_data:
+      name: Cozinha3
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: media_player.spotify_rui_lima
+    service: media_player.media_previous_track
+- id: '1589975978222'
+  alias: BOTAO RF COZINHA SPOTIFY PLAY/PAUSE
+  description: ''
+  trigger:
+  - event_data:
+      name: Cozinha1
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: media_player.spotify_rui_lima
+    service: media_player.media_play_pause
+- id: '1589976053764'
+  alias: BOTAO RF COZINHA SPOTIFY MUTE
+  description: ''
+  trigger:
+  - event_data:
+      name: Cozinha2
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: media_player.spotify_rui_lima
+    service: media_player.volume_mute
+- id: '1590264305974'
+  alias: SE TV FOR LIGADO > LIGAR AV RECEIVER E MEO
+  description: ''
+  trigger:
+  - entity_id: media_player.tv_sala
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: script.1590249707730
+    service: script.1590249707730
+  - delay: '2'
+  - data: {}
+    service: script.1590264930511
+- id: '1590264384713'
+  alias: SE TV FOR DESLIGADO > LIGAR AV RECEIVER E MEO
+  description: ''
+  trigger:
+  - entity_id: media_player.tv_sala
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    service: script.1590249707730
+  - delay: '2'
+  - data: {}
+    service: script.1590264930511
+- id: '1590772258441'
+  alias: BOTÂO RM433 ACENDER LUZ SALA 2
+  description: ''
+  trigger:
+  - event_data:
+      name: a
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_sala_2
+    service: light.toggle
+- id: '1592080785521'
+  alias: DESLIGAR TOMADA SE NÃO HOUVER MOVIMENTO A NOITE
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_sala
+    for: '3600'
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: and
+    conditions:
+    - after: '23:00'
+      before: 08:00
+      condition: time
+  action:
+  - data: {}
+    entity_id: switch.plug_158d000156fa56
+    service: switch.turn_off
+  mode: single
+- id: '1593038008073'
+  alias: NOVO EVENTO -> SMARKIO
+  description: ''
+  trigger:
+  - entity_id: calendar.rui_lima_smark_io
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: Evento SMARKIO próximo
+      title: Evento
+    service: notify.pushbullet
+- id: '1593041695496'
+  alias: DARK THEME ON START
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      name: stell_blue_with_colors
+    service: frontend.set_theme
+- id: '1594925743789'
+  alias: CAMPAINHA PORTA DE CIMA
+  description: ''
+  trigger:
+  - event_data:
+      entity_id: binary_sensor.vibration_158d000483b31e
+      movement_type: vibrate
+    event_type: xiaomi_aqara.movement
+    platform: event
+  condition: []
+  action:
+  - data:
+      message: Campainha
+      title: Está alguém à Porta - 5ºdrt
+    service: notify.mobile_app_mi_9t_pro
+  - data:
+      message: Está alguém à Porta - 5ºdrt
+    service: notify.tv_sala
+  mode: single
+- id: '1594988625199'
+  alias: LIGAR-DESLIGAR LUZ DO QUARTO COM BOTÃO QUARTO -> DIREITO
+  description: ''
+  trigger:
+  - event_data:
+      click_type: single
+      entity_id: binary_sensor.wall_switch_left_quarto
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto
+    service: light.toggle
+  mode: single
+- id: '1594990438531'
+  alias: LIGAR-DESLIGAR LUZ DO QUARTO COM BOTÃO QUARTO -> ESQUERDO
+  description: ''
+  trigger:
+  - event_data:
+      click_type: single
+      entity_id: binary_sensor.wall_switch_right_quarto
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: light.luz_corredor
+    service: light.toggle
+  mode: single
+- id: '1594990994482'
+  alias: MOVIMENTO NA COZINHA ACENDE A LUZ -> COZINHA
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_cozinha
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - below: '20'
+    condition: numeric_state
+    entity_id: sensor.illumination_158d000460bae5
+  action:
+  - data: {}
+    entity_id: light.luz_cozinha
+    service: light.turn_on
+  mode: single
+- id: '1594991885632'
+  alias: SEM MOVIMENTO NA COZINHA APAGA A LUZ -> COZINHA
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_cozinha
+    for: 00:05:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_cozinha
+    service: light.turn_off
+  mode: single
+- id: '1595065347761'
+  alias: CLICK DOUBLE -> LIGAR-DESLIGAR LUZ (100) DO QUARTO COM BOTÃO QUARTO -> DIREITO
+  description: ''
+  trigger:
+  - event_data:
+      click_type: double
+      entity_id: binary_sensor.wall_switch_left_quarto
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data:
+      brightness_step_pct: -20
+    entity_id: light.luz_quarto
+    service: light.turn_on
+  mode: single
+- id: '1596304803060'
+  alias: SEM MOVIMENTO QUARTO APAGAR LUZES
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_quarto
+    for: '10'
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto
+    service: light.turn_off
+  - data: {}
+    entity_id: light.luz_rui
+    service: light.turn_off
+  mode: single
+- id: '1596305278815'
+  alias: LIGAR TOMADA SALA COM LONG PRESS BOTÃO SALA
+  description: ''
+  trigger:
+  - event_data:
+      click_type: long_click_press
+      entity_id: binary_sensor.switch_sala
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: switch.plug_158d000156fa56
+    service: switch.toggle
+  mode: single
+- id: '1597610016555'
+  alias: BRIGHTNESS + LUZ DO QUARTO COM BOTÃO(LONG PRESS) QUARTO -> DIREITO
+  description: ''
+  trigger:
+  - event_data:
+      click_type: long
+      entity_id: binary_sensor.wall_switch_left_quarto
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data:
+      brightness_step_pct: 20
+    entity_id: light.luz_quarto
+    service: light.turn_on
+  mode: single
+- id: '1597691488381'
+  alias: BOTAO_MAGALY_ACENDER_LUZ_RUI
+  description: ''
+  trigger:
+  - event_data:
+      click_type: hold
+      entity_id: binary_sensor.switch_magaly
+    event_type: xiaomi_aqara.click
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    service: light.toggle
+    target:
+      entity_id: light.luz_de_presenca
+  mode: single
+- id: '1597951216726'
+  alias: PERSIANA
+  description: ''
+  trigger:
+  - entity_id: sun.sun
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: cover.bf157b51cfa45960c0bmtp
+    service: cover.close_cover
+  mode: single
+- id: '1598311937187'
+  alias: botão pausar persiana
+  description: ''
+  trigger:
+  - event_data:
+      name: Rui3
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: cover.quarto
+    service: cover.stop_cover
+  mode: single
+- id: '1598312030035'
+  alias: botão subir persiana
+  description: ''
+  trigger:
+  - event_data:
+      name: Rui2
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: cover.quarto
+    service: cover.open_cover
+  mode: single
+- id: '1598312076857'
+  alias: Botão descer persiana
+  description: ''
+  trigger:
+  - event_data:
+      name: Rui1
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: cover.quarto
+    service: cover.close_cover
+  mode: single
+- id: '1599294287487'
+  alias: APAGAR LUZ VARANDE DE DEIXADO LIGADO
+  description: ''
+  trigger:
+  - entity_id: light.luz_varanda
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - delay: '10'
+  - data: {}
+    entity_id: light.luz_varanda
+    service: light.turn_off
+  mode: single
+- id: '1599294637527'
+  alias: ACENDER LUZ QUARTO COM BOTÃO VARANDA
+  description: ''
+  trigger:
+  - entity_id: switch.tasmota_tasmota2
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto_2
+    service: light.turn_on
+  mode: single
+- id: '1599294717999'
+  alias: APAGAR LUZ QUARTO COM BOTÃO VARANDA
+  description: ''
+  trigger:
+  - entity_id: switch.tasmota_tasmota2
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.luz_quarto_2
+    service: light.turn_off
+  mode: single
+- id: '1609101892026'
+  alias: Bateria Fraca
+  description: ''
+  trigger:
+  - platform: time
+    at: '20:00'
+  condition:
+  - condition: template
+    value_template: '{% if states(''sensor.low_battery'') %}true{% endif %}'
+  action:
+  - service: notify.mobile_app_mi_9t_pro
+    data:
+      message: '{{ states(''sensor.low_battery'') }}'
+  mode: single
+- id: '1609719442587'
+  alias: LIGAR AQUECEDOR SE TEMPERATURA ABAIXO DE 12º
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: climate.zhimi_heater_mc2_64_90_c1_7c_a8_a6
+    attribute: current_temperature
+    to: '10'
+  condition: []
+  action:
+  - service: climate.turn_on
+    data: {}
+    entity_id: climate.zhimi_heater_mc2_64_90_c1_7c_a8_a6
+  mode: single
+- id: '1609719605556'
+  alias: DESLIGAR AQUECEDOR SE TEMPERATURA ACIMA DE 19º
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: climate.zhimi_heater_mc2_64_90_c1_7c_a8_a6
+    attribute: current_temperature
+    to: '19'
+  condition: []
+  action:
+  - service: climate.turn_off
+    data: {}
+    entity_id: climate.zhimi_heater_mc2_64_90_c1_7c_a8_a6
+  mode: single
+- id: '1612475460451'
+  alias: Acender Luz despensa se porta abrir
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: f704ccb3e0acbd0182a4702dcc3efe24
+    entity_id: binary_sensor.door_window_sensor_158d00054a36d3
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    entity_id: light.despensa
+  mode: single
+- id: '1612475526590'
+  alias: Apagar Luz despensa se porta abrir
+  description: ''
+  trigger:
+  - type: not_opened
+    platform: device
+    device_id: f704ccb3e0acbd0182a4702dcc3efe24
+    entity_id: binary_sensor.door_window_sensor_158d00054a36d3
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    entity_id: light.despensa
+  mode: single
+- id: '1612515414681'
+  alias: ACENDER/APAGAR LUZ RUI SE MEXER
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.cube_last_state
+    to: flip180
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    entity_id: light.luz_rui
+  mode: single
+- id: '1612517590321'
+  alias: LIGAR/DESLIGAR LUZ PRESENÇA SE ROTATE
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.cube_last_state
+    to: rotate
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id:
+      - light.luz_de_presenca
+  mode: single
+- id: '1613134641267'
+  alias: AVISO QUANDO MÁRUINA LAVAR ROUPA TERMINAR DE LAVAR
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.maquina_lavar_roupa_current_consumption
+    below: '1'
+    for: 00:01:00
+  condition: []
+  action:
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: A Máquina de roupa terminou de lavar
+  mode: single
+- id: '1613134696447'
+  alias: AVISO QUANDO MÁRUINA LAVAR LOIÇA TERMINAR DE LAVAR
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.maquina_lavar_loica_current_consumption
+    below: '1'
+    for: 00:05:00
+  condition: []
+  action:
+  - service: tts.google_translate_say
+    data:
+      entity_id: media_player.living_room_speaker
+      message: A Máquina de louça terminou de lavar
+  mode: single
+- id: '1613315442594'
+  alias: LIGAR/DESLIGAR TERMOACUMULADOR
+  description: ''
+  trigger:
+  - platform: time
+    at: '10:00'
+  condition: []
+  action:
+  - type: turn_on
+    device_id: b6ada6d875bd4878a61ed994d6c15c2f
+    entity_id: switch.shelly_termo_acumulador
+    domain: switch
+  - delay:
+      hours: 1
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: b6ada6d875bd4878a61ed994d6c15c2f
+    entity_id: switch.shelly_termo_acumulador
+    domain: switch
+  - delay:
+      hours: 9
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - type: turn_on
+    device_id: b6ada6d875bd4878a61ed994d6c15c2f
+    entity_id: switch.shelly_termo_acumulador
+    domain: switch
+  - delay:
+      hours: 1
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: b6ada6d875bd4878a61ed994d6c15c2f
+    entity_id: switch.shelly_termo_acumulador
+    domain: switch
+  mode: single
+- id: '1613408051887'
+  alias: TOMADA GERAL - DESLIGAR SE W < 31
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.tomada_geral_current_consumption
+    below: '35'
+    for: 00:03:00
+    above: '5'
+  condition: []
+  action:
+  - service: switch.turn_off
+    data: {}
+    entity_id: switch.plug_158d000156fa56
+  mode: single
+- id: '1613694818056'
+  alias: LIGAR TERMOACUMULADOR
+  description: ''
+  trigger:
+  - platform: time
+    at: 05:30
+  condition: []
+  action:
+  - type: turn_on
+    device_id: b6ada6d875bd4878a61ed994d6c15c2f
+    entity_id: switch.shelly_termo_acumulador
+    domain: switch
+  - delay:
+      hours: 1
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - service: automation.turn_off
+    data: {}
+    entity_id: automation.ligar_termoacumulador
+  mode: single
+- id: '1613850654697'
+  alias: RELEAD TUYA DEVICE AFTER HOME ASSISTANT START
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+  - service: localtuya.reload
+    data: {}
+  mode: single
+- id: '1614619787100'
+  alias: NINGUÉM EM CASA
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: person.magaly
+    to: not_home
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.rui_lima
+      state: not_home
+  action:
+  - service: notify.mobile_app_mi_9t_pro
+    data:
+      message: Ningém em casa
+  mode: single
+- id: '1614818254902'
+  alias: LIGAR/DESLIGAR AQUECER LEITE SE tap_twice
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.cube_last_state
+    to: tap_twice
+  condition: []
+  action:
+  - type: toggle
+    device_id: 6b87d258f91adec24c31a60fe837e590
+    entity_id: switch.tomada_persiana
+    domain: switch
+  mode: single
+- id: '1615721937013'
+  alias: LIGAR/DESLIGAR LUZ QUARTO SE FLIP90
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: sensor.cube_last_state
+    to: flip90
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.luz_quarto
+  mode: single
+- id: '1616613939045'
+  alias: 'ALARM RF '
+  description: ''
+  trigger:
+  - event_data:
+      command: 24
+    event_type: sonoff.remote
+    platform: event
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.luz_vertical
+  mode: single
+- id: '1617975364757'
+  alias: LIGAR TERMOACUMULADOR SE TEMPERATURA <35
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.shelly_termoacumulador_temperature
+    below: '35'
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.shelly_termo_acumulador
+  mode: single
+- id: '1617975422626'
+  alias: DESLIGAR TERMOACUMULADOR SE TEMPERATURA >45
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.shelly_termoacumulador_temperature
+    above: input_number.temperatura_maxima_termoacumulador
+  condition: []
+  action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.shelly_termo_acumulador
+  mode: single
+- id: '1617989475176'
+  alias: Zone Notification
+  description: ''
+  use_blueprint:
+    path: homeassistant/notify_leaving_zone.yaml
+    input:
+      person_entity: person.rui_lima
+      zone_entity: zone.home
+      notify_device: b29c6663980245c6a24e918671551fbf
+- id: '1618087015319'
+  alias: TIMER END
+  description: ''
+  trigger:
+  - platform: state
+    to: ringing
+    entity_id: sensor.living_room_speaker_timers
+    attribute: next_timer_status
+  condition: []
+  action:
+  - service: notify.tv_sala
+    data:
+      message: END TIMER
+      title: TIMER
+  - service: light.turn_on
+    target:
+      entity_id: light.luz_vertical
+    data:
+      color_name: red
+  mode: single
+- id: '1618860005543'
+  alias: SE ALGUÉM TOCAR À CAMPAINHA FAZER...COISAS
+  description: ''
+  trigger:
+  - platform: numeric_state
+    entity_id: sensor.shelly_shuni_1_483fda82c024_voltage
+    above: '0.2'
+  condition: []
+  action:
+  - device_id: b29c6663980245c6a24e918671551fbf
+    domain: mobile_app
+    type: notify
+    title: Campainha
+    message: Está alguém à porta
+  - service: notify.tv_sala
+    data:
+      message: Está alguém à porta
+      title: Campainha
+  - service: counter.increment
+    target:
+      entity_id: counter.campainha
+  - service: notify.pushbullet
+    data:
+      message: Está alguém à porta
+      title: Campainha
+  - service: light.turn_on
+    target:
+      entity_id: light.fita_led_tv
+    data:
+      effect: Alarm
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 20
+      milliseconds: 0
+  - service: light.turn_off
+    target:
+      entity_id: light.fita_led_tv
+  mode: single
+- id: '1621123474596'
+  alias: PERSIANA JANELA - DESLIGAR LUZ QUANDO FECHAR
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 4ffd21dd393e144896fcd838d73cfa5a
+    domain: cover
+    entity_id: cover.persiana_janela_sala
+    type: closing
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 25
+      milliseconds: 0
+  condition: []
+  action:
+  - service: cover.stop_cover
+    target:
+      device_id: 4ffd21dd393e144896fcd838d73cfa5a
+  mode: single
+- id: '1621205475409'
+  alias: PERSIANA JANELA - DESLIGAR LUZ QUANDO ABRIR
+  description: ''
+  trigger:
+  - platform: device
+    device_id: 4ffd21dd393e144896fcd838d73cfa5a
+    domain: cover
+    entity_id: cover.persiana_janela_sala
+    type: opening
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 25
+      milliseconds: 0
+  condition: []
+  action:
+  - service: cover.stop_cover
+    target:
+      device_id: 4ffd21dd393e144896fcd838d73cfa5a
+  mode: single
+- id: '1621205540473'
+  alias: PERSIANA PORTA - DESLIGAR LUZ QUANDO ABRIR
+  description: ''
+  trigger:
+  - platform: device
+    device_id: fa6c17d2875533464d0f1f0d3e8ff8b3
+    domain: cover
+    entity_id: cover.persiana_porta_sala
+    type: opening
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 25
+      milliseconds: 0
+  condition: []
+  action:
+  - service: cover.stop_cover
+    target:
+      device_id: fa6c17d2875533464d0f1f0d3e8ff8b3
+  mode: single
+- id: '1621205569490'
+  alias: PERSIANA PORTA - DESLIGAR LUZ QUANDO FECHAR
+  description: ''
+  trigger:
+  - platform: device
+    device_id: fa6c17d2875533464d0f1f0d3e8ff8b3
+    domain: cover
+    entity_id: cover.persiana_porta_sala
+    type: closing
+  condition: []
+  action:
+  - service: cover.stop_cover
+    target:
+      device_id: fa6c17d2875533464d0f1f0d3e8ff8b3
+  mode: single

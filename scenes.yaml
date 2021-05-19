@@ -1,0 +1,25 @@
+- id: '1592137815012'
+  name: PLAY TV SALA
+  entities:
+    script.1592137728424:
+      friendly_name: PLAY TV SALA
+      last_triggered: '2020-06-14T12:28:58.113665+00:00'
+      state: 'off'
+- id: '1602244468898'
+  name: Camera Quarto
+  entities:
+    script.mostrar_camera_na_tv:
+      last_triggered: '2020-10-08T20:10:24.226238+00:00'
+      mode: single
+      current: 0
+      friendly_name: MOSTRAR CAMERA NA TV
+      state: 'off'
+- id: '1613853935270'
+  name: GRAVAR VÍDEO
+  entities:
+    script.gravar_video:
+      last_triggered:
+      mode: single
+      current: 0
+      friendly_name: GRAVAR VÍDEO
+      state: 'off'
