@@ -15,3 +15,5 @@
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
+SERVICE_ACCOUNT.JSON
+/config/SERVICE_ACCOUNT.JSON
